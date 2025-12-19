@@ -190,7 +190,9 @@ Este documento describe paso a paso cómo **replicar la inferencia del modelo UN
 ### Paso 1 — Acceso al servidor y activación del entorno
 
 ssh ferreyra@yacy
+
 cd ~/S4A-Models
+
 source ~/s4a-venv/bin/activate
 
 Verificar que el entorno esté activo:
@@ -198,6 +200,7 @@ Verificar que el entorno esté activo:
 (s4a-venv) ferreyra@yacy:~/S4A-Models>
 
 Paso 2 — Ubicación de los logs de UNet
+
 El repositorio utiliza una estructura de logs personalizada:
 
 logs/
@@ -210,42 +213,56 @@ logs/
 Para trabajar con UNet:
 
 cd logs/unet
+
 ls
 
 Paso 3 — Identificación de la corrida correcta
 Las carpetas dentro de logs/unet/ pueden corresponder a:
 
 -timestamps (YYYYMMDDHHMMSS)
+
 -nombres manuales (por ejemplo flor_2019)
 
 Se recomienda seleccionar la corrida más reciente, por ejemplo:
 
 cd 20251216212513
+
 ls
+
 Dentro de la corrida se encuentra la carpeta del experimento:
 
 cd run_20251216212513
+
 ls
 
 Paso 4 — Selección del checkpoint del modelo
+
 Ingresar a la carpeta de checkpoints:
 
 cd checkpoints
+
 ls
+
 Ejemplo de archivos disponibles:
 
 
 epoch=0-step=3780.ckpt
+
 epoch=1-step=7560.ckpt
+
 epoch=2-step=11340.ckpt
+
 epoch=3-step=15120.ckpt
+
 Se recomienda utilizar el checkpoint del último epoch, por ejemplo:
 
 
 epoch=3-step=15120.ckpt
 
 Paso 5 — Volver al directorio raíz del repositorio
+
 cd ~/S4A-Models
+
 Asegurarse de que el entorno virtual continúe activo.
 
 Paso 6 — Ejecución de la inferencia (visualización de predicciones)
@@ -266,9 +283,11 @@ python visualize_predictions.py \
 
 Salida esperada:
 Exporting to: logs/unet/20251216212513/run_20251216212513
+
 El proceso puede tardar varios minutos y no muestra barra de progreso.
 
 Paso 7 — Exploración de los resultados generados
+
 ls logs/unet/20251216212513/run_20251216212513
 
 Ejemplo de archivos generados:
@@ -283,4 +302,5 @@ El archivo evaluation_of_image_9_epoch3.png corresponde a una predicción visual
 
 Paso 8 — Exploración adicional (opcional)
 Para listar todos los archivos generados:
+
 find logs/unet/20251216212513/run_20251216212513 -type f | less
