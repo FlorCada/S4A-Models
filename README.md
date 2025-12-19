@@ -162,3 +162,101 @@ If you use our work, please cite:
   doi={10.1109/JSTARS.2022.3164771}
 }
 ```
+## Replicación de inferencia UNet (PAD) — Paso a paso
+
+### Paso 1 — Acceso al servidor y activación del entorno
+
+ssh ferreyra@yacy
+cd ~/S4A-Models
+source ~/s4a-venv/bin/activate
+
+Verificar que el entorno esté activo:
+
+(s4a-venv) ferreyra@yacy:~/S4A-Models>
+
+Paso 2 — Ubicación de los logs de UNet
+El repositorio utiliza una estructura de logs personalizada:
+
+logs/
+└── unet/
+    └── YYYYMMDDHHMMSS/
+        └── run_YYYYMMDDHHMMSS/
+            └── checkpoints/
+                └── epoch=...ckpt
+Para trabajar con UNet:
+
+cd logs/unet
+ls
+
+Paso 3 — Identificación de la corrida correcta
+Las carpetas dentro de logs/unet/ pueden corresponder a:
+
+-timestamps (YYYYMMDDHHMMSS)
+-nombres manuales (por ejemplo flor_2019)
+
+Se recomienda seleccionar la corrida más reciente, por ejemplo:
+
+cd 20251216212513
+ls
+Dentro de la corrida se encuentra la carpeta del experimento:
+
+cd run_20251216212513
+ls
+
+Paso 4 — Selección del checkpoint del modelo
+Ingresar a la carpeta de checkpoints:
+
+cd checkpoints
+ls
+Ejemplo de archivos disponibles:
+
+
+epoch=0-step=3780.ckpt
+epoch=1-step=7560.ckpt
+epoch=2-step=11340.ckpt
+epoch=3-step=15120.ckpt
+Se recomienda utilizar el checkpoint del último epoch, por ejemplo:
+
+
+epoch=3-step=15120.ckpt
+
+Paso 5 — Volver al directorio raíz del repositorio
+cd ~/S4A-Models
+Asegurarse de que el entorno virtual continúe activo.
+
+Paso 6 — Ejecución de la inferencia (visualización de predicciones)
+El script utiliza el argumento --load_checkpoint.
+
+python visualize_predictions.py \
+  --model unet \
+  --load_checkpoint logs/unet/20251216212513/run_20251216212513/checkpoints/epoch=3-step=15120.ckpt \
+  --root_path_coco coco_files \
+  --netcdf_path dataset/netcdf \
+  --bands B02 B03 B04 B08 \
+  --img_size 61 61 \
+  --requires_norm \
+  --num_workers 14 \
+  --num_gpus 1 \
+  --fixed_window
+
+
+Salida esperada:
+Exporting to: logs/unet/20251216212513/run_20251216212513
+El proceso puede tardar varios minutos y no muestra barra de progreso.
+
+Paso 7 — Exploración de los resultados generados
+ls logs/unet/20251216212513/run_20251216212513
+
+Ejemplo de archivos generados:
+avg_train_losses.txt
+avg_val_losses.txt
+lrs.txt
+checkpoints/
+tensorboard/
+evaluation_of_image_9_epoch3.png
+
+El archivo evaluation_of_image_9_epoch3.png corresponde a una predicción visual generada por el modelo UNet.
+
+Paso 8 — Exploración adicional (opcional)
+Para listar todos los archivos generados:
+find logs/unet/20251216212513/run_20251216212513 -type f | less
