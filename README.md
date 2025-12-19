@@ -162,21 +162,6 @@ If you use our work, please cite:
   doi={10.1109/JSTARS.2022.3164771}
 }
 ```
-# UNet (PAD) — Replicación de inferencia y exploración de resultados
-
-Este documento describe paso a paso cómo **replicar la inferencia del modelo UNet** entrenado sobre el dataset **PAD (pixel-wise)** del benchmark Sen4AgriNet, incluyendo la localización de checkpoints, ejecución de inferencia, exploración de resultados y visualización de métricas.
-
----
-
-## 🧠 Contexto general
-
-- **Modelo:** UNet  
-- **Dataset:** PAD (pixel-wise annotations)  
-- **Framework:** PyTorch Lightning  
-- **Servidor:** YACY  
-- **Entorno virtual:** `s4a-venv`  
-
----
 
 
 
